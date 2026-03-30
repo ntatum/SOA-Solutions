@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOA Solutions — Stewards of Abundance</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dim: #7A6330;
+    --deep: #0A0C0F;
+    --deep2: #111318;
+    --deep3: #181C23;
+    --surface: #1E222C;
+    --text: #EDE8DC;
+    --text-muted: #8A8070;
+    --cream: #F5F0E8;
+    --olive: #2A3020;
+    --accent-blue: #3A5C7A;
+  }
+
+- { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+background: var(–deep);
+color: var(–text);
+font-family: ‘DM Sans’, sans-serif;
+font-weight: 300;
+overflow-x: hidden;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::before {
+content: ‘’;
+position: fixed;
+inset: 0;
+background-image: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 256 256’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘noise’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23noise)’ opacity=‘0.04’/%3E%3C/svg%3E”);
+pointer-events: none;
+z-index: 9999;
+opacity: 0.35;
+}
+
+/* ── NAV ── */
+nav {
+position: fixed;
+top: 0; left: 0; right: 0;
+z-index: 100;
+padding: 1.4rem 3rem;
+display: flex;
+justify-content: space-between;
+align-items: center;
+background: linear-gradient(to bottom, rgba(10,12,15,0.95), transparent);
+backdrop-filter: blur(2px);
+}
+
+.nav-logo {
+font-family: ‘Cinzel’, serif;
+font-size: 1.05rem;
+letter-spacing: 0.18em;
+color: var(–gold);
+text-decoration: none;
+}
+
+.nav-logo span {
+color: var(–text);
+opacity: 0.5;
+font-size: 0.7rem;
+letter-spacing: 0.25em;
+display: block;
+margin-top: 1px;
+}
+
+.nav-links {
+display: flex;
+gap: 2.5rem;
+list-style: none;
+}
+
+.nav-links a {
+color: var(–text-muted);
+text-decoration: none;
+font-size: 0.78rem;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+transition: color 0.3s;
+}
+
+.nav-links a:hover { color: var(–gold-light); }
+
+.nav-cta {
+background: transparent;
+border: 1px solid var(–gold-dim);
+color: var(–gold);
+padding: 0.55rem 1.4rem;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 0.78rem;
+letter-spacing: 0.1em;
+cursor: pointer;
+transition: all 0.3s;
+text-transform: uppercase;
+text-decoration: none;
+}
+
+.nav-cta:hover {
+background: var(–gold);
+color: var(–deep);
+}
+
+/* ── HERO ── */
+.hero {
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+position: relative;
+overflow: hidden;
+padding: 8rem 2rem 4rem;
+}
+
+.hero-bg {
+position: absolute;
+inset: 0;
+background:
+radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,168,76,0.07) 0%, transparent 70%),
+radial-gradient(ellipse 50% 40% at 20% 80%, rgba(42,48,32,0.4) 0%, transparent 60%),
+radial-gradient(ellipse 40% 30% at 80% 20%, rgba(58,92,122,0.15) 0%, transparent 50%);
+}
+
+/* Decorative arch lines */
+.hero-arch {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -52%);
+width: 700px;
+height: 700px;
+border-radius: 50%;
+border: 1px solid rgba(201,168,76,0.06);
+pointer-events: none;
+}
+
+.hero-arch::before {
+content: ‘’;
+position: absolute;
+inset: 40px;
+border-radius: 50%;
+border: 1px solid rgba(201,168,76,0.04);
+}
+
+.hero-arch::after {
+content: ‘’;
+position: absolute;
+inset: 80px;
+border-radius: 50%;
+border: 1px solid rgba(201,168,76,0.03);
+}
+
+.verse-tag {
+font-family: ‘Cormorant Garamond’, serif;
+font-style: italic;
+font-size: 0.88rem;
+color: var(–gold-dim);
+letter-spacing: 0.08em;
+margin-bottom: 2.5rem;
+opacity: 0;
+animation: fadeUp 1s ease 0.3s forwards;
+}
+
+.hero-eyebrow {
+font-family: ‘Cinzel’, serif;
+font-size: 0.7rem;
+letter-spacing: 0.4em;
+color: var(–gold);
+text-transform: uppercase;
+margin-bottom: 1.5rem;
+opacity: 0;
+animation: fadeUp 1s ease 0.5s forwards;
+}
+
+.hero-title {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(3.5rem, 8vw, 7rem);
+font-weight: 300;
+line-height: 1.05;
+text-align: center;
+max-width: 900px;
+opacity: 0;
+animation: fadeUp 1s ease 0.7s forwards;
+}
+
+.hero-title em {
+font-style: italic;
+color: var(–gold-light);
+}
+
+.hero-subtitle {
+font-size: 1rem;
+color: var(–text-muted);
+text-align: center;
+max-width: 560px;
+line-height: 1.8;
+margin-top: 2rem;
+font-weight: 300;
+opacity: 0;
+animation: fadeUp 1s ease 0.9s forwards;
+}
+
+.hero-actions {
+display: flex;
+gap: 1.2rem;
+margin-top: 3rem;
+flex-wrap: wrap;
+justify-content: center;
+opacity: 0;
+animation: fadeUp 1s ease 1.1s forwards;
+}
+
+.btn-primary {
+background: linear-gradient(135deg, var(–gold), var(–gold-dim));
+color: var(–deep);
+padding: 0.9rem 2.2rem;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 0.82rem;
+font-weight: 500;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+border: none;
+cursor: pointer;
+text-decoration: none;
+display: inline-block;
+transition: all 0.3s;
+}
+
+.btn-primary:hover {
+background: linear-gradient(135deg, var(–gold-light), var(–gold));
+transform: translateY(-2px);
+box-shadow: 0 8px 30px rgba(201,168,76,0.25);
+}
+
+.btn-outline {
+background: transparent;
+color: var(–text);
+padding: 0.9rem 2.2rem;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 0.82rem;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+border: 1px solid rgba(237,232,220,0.2);
+cursor: pointer;
+text-decoration: none;
+display: inline-block;
+transition: all 0.3s;
+}
+
+.btn-outline:hover {
+border-color: var(–gold-dim);
+color: var(–gold-light);
+}
+
+.hero-scroll {
+position: absolute;
+bottom: 2.5rem;
+left: 50%;
+transform: translateX(-50%);
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 0.5rem;
+opacity: 0;
+animation: fadeUp 1s ease 1.5s forwards;
+}
+
+.hero-scroll span {
+font-size: 0.65rem;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+color: var(–text-muted);
+}
+
+.scroll-line {
+width: 1px;
+height: 40px;
+background: linear-gradient(to bottom, var(–gold-dim), transparent);
+animation: scrollPulse 2s ease infinite;
+}
+
+/* ── DIVIDER ── */
+.divider {
+display: flex;
+align-items: center;
+gap: 1.5rem;
+margin: 0 auto;
+max-width: 300px;
+}
+
+.divider-line {
+flex: 1;
+height: 1px;
+background: linear-gradient(to right, transparent, var(–gold-dim), transparent);
+}
+
+.divider-icon {
+color: var(–gold);
+font-size: 1rem;
+}
+
+/* ── SECTION BASICS ── */
+section {
+padding: 6rem 2rem;
+}
+
+.section-label {
+font-family: ‘Cinzel’, serif;
+font-size: 0.65rem;
+letter-spacing: 0.4em;
+color: var(–gold);
+text-transform: uppercase;
+text-align: center;
+margin-bottom: 1rem;
+}
+
+.section-title {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(2.2rem, 4vw, 3.5rem);
+font-weight: 300;
+text-align: center;
+line-height: 1.2;
+margin-bottom: 1.2rem;
+}
+
+.section-title em {
+font-style: italic;
+color: var(–gold-light);
+}
+
+.section-desc {
+text-align: center;
+color: var(–text-muted);
+max-width: 540px;
+margin: 0 auto 4rem;
+line-height: 1.9;
+font-size: 0.92rem;
+}
+
+/* ── SCRIPTURE BANNER ── */
+.scripture-banner {
+background: linear-gradient(135deg, var(–olive) 0%, #1A2015 100%);
+border-top: 1px solid rgba(201,168,76,0.15);
+border-bottom: 1px solid rgba(201,168,76,0.15);
+padding: 4rem 2rem;
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+
+.scripture-banner::before {
+content: ‘\275D’;
+position: absolute;
+top: 1rem;
+left: 3rem;
+font-size: 8rem;
+color: rgba(201,168,76,0.05);
+font-family: serif;
+line-height: 1;
+}
+
+.scripture-text {
+font-family: ‘Cormorant Garamond’, serif;
+font-style: italic;
+font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+font-weight: 300;
+color: var(–cream);
+max-width: 800px;
+margin: 0 auto 1rem;
+line-height: 1.6;
+}
+
+.scripture-ref {
+font-family: ‘Cinzel’, serif;
+font-size: 0.7rem;
+letter-spacing: 0.3em;
+color: var(–gold);
+}
+
+/* ── TOOLS GRID ── */
+.tools-section {
+background: var(–deep2);
+}
+
+.tools-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 1.5px;
+max-width: 1200px;
+margin: 0 auto;
+background: rgba(201,168,76,0.08);
+border: 1px solid rgba(201,168,76,0.08);
+}
+
+.tool-card {
+background: var(–deep2);
+padding: 2.8rem 2.5rem;
+position: relative;
+overflow: hidden;
+cursor: pointer;
+transition: background 0.4s;
+text-decoration: none;
+display: block;
+color: inherit;
+}
+
+.tool-card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0;
+width: 100%;
+height: 2px;
+background: linear-gradient(to right, transparent, var(–gold), transparent);
+transform: scaleX(0);
+transition: transform 0.4s;
+}
+
+.tool-card:hover {
+background: var(–surface);
+}
+
+.tool-card:hover::before {
+transform: scaleX(1);
+}
+
+.tool-number {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 3.5rem;
+font-weight: 300;
+color: rgba(201,168,76,0.12);
+line-height: 1;
+margin-bottom: 1.5rem;
+transition: color 0.4s;
+}
+
+.tool-card:hover .tool-number {
+color: rgba(201,168,76,0.25);
+}
+
+.tool-icon {
+font-size: 1.6rem;
+margin-bottom: 1rem;
+display: block;
+}
+
+.tool-title {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 1.5rem;
+font-weight: 400;
+margin-bottom: 0.8rem;
+color: var(–cream);
+line-height: 1.2;
+}
+
+.tool-desc {
+font-size: 0.83rem;
+color: var(–text-muted);
+line-height: 1.8;
+margin-bottom: 1.8rem;
+}
+
+.tool-tag {
+display: inline-block;
+font-size: 0.65rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–gold-dim);
+border: 1px solid rgba(201,168,76,0.2);
+padding: 0.3rem 0.8rem;
+transition: all 0.3s;
+}
+
+.tool-card:hover .tool-tag {
+border-color: var(–gold);
+color: var(–gold-light);
+}
+
+/* ── AI GRADER SECTION ── */
+.grader-section {
+background: var(–deep);
+max-width: 1000px;
+margin: 0 auto;
+padding: 6rem 2rem;
+}
+
+.grader-box {
+background: var(–deep3);
+border: 1px solid rgba(201,168,76,0.12);
+padding: 3rem;
+position: relative;
+}
+
+.grader-box::after {
+content: ‘’;
+position: absolute;
+bottom: -1px;
+left: 0;
+right: 0;
+height: 1px;
+background: linear-gradient(to right, transparent, var(–gold-dim), transparent);
+}
+
+.grader-header {
+display: flex;
+align-items: flex-start;
+gap: 2rem;
+margin-bottom: 2rem;
+flex-wrap: wrap;
+}
+
+.grader-badge {
+background: linear-gradient(135deg, var(–gold-dim), #4A3A18);
+padding: 0.4rem 1rem;
+font-size: 0.65rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–gold-light);
+white-space: nowrap;
+align-self: flex-start;
+margin-top: 0.3rem;
+}
+
+.grader-title {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 2rem;
+font-weight: 300;
+line-height: 1.3;
+}
+
+.input-group {
+margin-bottom: 1.2rem;
+}
+
+.input-group label {
+display: block;
+font-size: 0.72rem;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+color: var(–text-muted);
+margin-bottom: 0.6rem;
+}
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+width: 100%;
+background: rgba(255,255,255,0.03);
+border: 1px solid rgba(201,168,76,0.15);
+color: var(–text);
+padding: 0.85rem 1rem;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 0.88rem;
+outline: none;
+transition: border-color 0.3s;
+resize: none;
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus {
+border-color: var(–gold-dim);
+}
+
+.input-group select option {
+background: var(–deep3);
+}
+
+.input-row {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 1rem;
+}
+
+.grader-submit {
+width: 100%;
+background: linear-gradient(135deg, var(–gold), var(–gold-dim));
+color: var(–deep);
+border: none;
+padding: 1rem;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 0.82rem;
+font-weight: 500;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+cursor: pointer;
+margin-top: 0.5rem;
+transition: all 0.3s;
+}
+
+.grader-submit:hover {
+background: linear-gradient(135deg, var(–gold-light), var(–gold));
+transform: translateY(-1px);
+box-shadow: 0 6px 25px rgba(201,168,76,0.2);
+}
+
+.grader-submit:disabled {
+opacity: 0.5;
+cursor: not-allowed;
+transform: none;
+}
+
+.result-box {
+margin-top: 2rem;
+border: 1px solid rgba(201,168,76,0.2);
+background: rgba(201,168,76,0.03);
+padding: 2rem;
+display: none;
+}
+
+.result-box.visible { display: block; }
+
+.score-display {
+display: flex;
+align-items: center;
+gap: 2rem;
+margin-bottom: 1.5rem;
+flex-wrap: wrap;
+}
+
+.score-circle {
+width: 90px;
+height: 90px;
+border-radius: 50%;
+border: 2px solid var(–gold);
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+}
+
+.score-num {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 2rem;
+font-weight: 300;
+color: var(–gold-light);
+line-height: 1;
+}
+
+.score-label {
+font-size: 0.6rem;
+letter-spacing: 0.15em;
+color: var(–text-muted);
+text-transform: uppercase;
+}
+
+.result-text {
+font-size: 0.88rem;
+line-height: 1.9;
+color: var(–text);
+}
+
+.result-text strong {
+color: var(–gold-light);
+font-weight: 500;
+}
+
+.loading-dots {
+display: inline-flex;
+gap: 4px;
+align-items: center;
+}
+
+.loading-dots span {
+width: 6px;
+height: 6px;
+background: var(–gold);
+border-radius: 50%;
+animation: dotPulse 1.4s ease infinite;
+}
+
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+/* ── PILLARS ── */
+.pillars-section {
+background: var(–deep3);
+}
+
+.pillars-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+gap: 2rem;
+max-width: 1100px;
+margin: 0 auto;
+}
+
+.pillar {
+text-align: center;
+padding: 2.5rem 1.5rem;
+border: 1px solid rgba(201,168,76,0.07);
+transition: border-color 0.3s, transform 0.3s;
+}
+
+.pillar:hover {
+border-color: rgba(201,168,76,0.2);
+transform: translateY(-4px);
+}
+
+.pillar-glyph {
+font-size: 2rem;
+display: block;
+margin-bottom: 1.2rem;
+}
+
+.pillar-name {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 1.25rem;
+font-weight: 400;
+margin-bottom: 0.8rem;
+color: var(–cream);
+}
+
+.pillar-text {
+font-size: 0.8rem;
+color: var(–text-muted);
+line-height: 1.8;
+}
+
+/* ── STRATEGIES ── */
+.strategies-section {
+background: var(–deep2);
+}
+
+.strategies-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 1px;
+max-width: 1200px;
+margin: 0 auto;
+background: rgba(201,168,76,0.06);
+}
+
+.strategy-card {
+background: var(–deep2);
+padding: 2.5rem;
+transition: background 0.3s;
+}
+
+.strategy-card:hover {
+background: var(–surface);
+}
+
+.strategy-phase {
+font-size: 0.65rem;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+color: var(–gold-dim);
+margin-bottom: 1rem;
+}
+
+.strategy-title {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 1.4rem;
+font-weight: 400;
+margin-bottom: 0.8rem;
+color: var(–cream);
+}
+
+.strategy-desc {
+font-size: 0.82rem;
+color: var(–text-muted);
+line-height: 1.8;
+margin-bottom: 1.5rem;
+}
+
+.strategy-tags {
+display: flex;
+flex-wrap: wrap;
+gap: 0.5rem;
+}
+
+.stag {
+font-size: 0.6rem;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(–text-muted);
+background: rgba(255,255,255,0.04);
+padding: 0.25rem 0.6rem;
+border-radius: 0px;
+border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ── DEAL SCORER ── */
+.deal-section {
+background: var(–deep);
+padding: 6rem 2rem;
+}
+
+.deal-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 2px;
+max-width: 1000px;
+margin: 3rem auto 0;
+background: rgba(201,168,76,0.06);
+}
+
+.deal-input-panel {
+background: var(–deep3);
+padding: 2.5rem;
+}
+
+.deal-result-panel {
+background: var(–deep2);
+padding: 2.5rem;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+text-align: center;
+min-height: 400px;
+}
+
+.deal-placeholder {
+color: var(–text-muted);
+font-size: 0.85rem;
+font-style: italic;
+}
+
+.meter-wrap {
+width: 100%;
+max-width: 260px;
+}
+
+.meter-label {
+font-size: 0.65rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–text-muted);
+display: flex;
+justify-content: space-between;
+margin-bottom: 0.4rem;
+}
+
+.meter-bar {
+height: 3px;
+background: rgba(255,255,255,0.06);
+margin-bottom: 1.2rem;
+position: relative;
+overflow: hidden;
+}
+
+.meter-fill {
+height: 100%;
+background: linear-gradient(to right, var(–gold-dim), var(–gold-light));
+transition: width 1s ease;
+}
+
+/* ── TESTIMONIALS ── */
+.testimonials-section {
+background: var(–deep3);
+}
+
+.testimonials-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 1.5px;
+max-width: 1100px;
+margin: 0 auto;
+background: rgba(201,168,76,0.06);
+}
+
+.tcard {
+background: var(–deep3);
+padding: 2.5rem;
+}
+
+.tcard-quote {
+font-family: ‘Cormorant Garamond’, serif;
+font-style: italic;
+font-size: 1.05rem;
+line-height: 1.7;
+color: var(–text);
+margin-bottom: 1.5rem;
+}
+
+.tcard-author {
+display: flex;
+align-items: center;
+gap: 0.8rem;
+}
+
+.tcard-avatar {
+width: 36px;
+height: 36px;
+border-radius: 50%;
+background: linear-gradient(135deg, var(–gold-dim), var(–olive));
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 0.75rem;
+color: var(–gold-light);
+font-family: ‘Cinzel’, serif;
+}
+
+.tcard-name {
+font-size: 0.82rem;
+color: var(–cream);
+font-weight: 400;
+}
+
+.tcard-role {
+font-size: 0.72rem;
+color: var(–text-muted);
+}
+
+.tcard-stars {
+color: var(–gold);
+font-size: 0.75rem;
+margin-bottom: 1rem;
+letter-spacing: 0.1em;
+}
+
+/* ── CTA ── */
+.cta-section {
+background: linear-gradient(135deg, var(–olive) 0%, #121810 60%, var(–deep) 100%);
+text-align: center;
+padding: 8rem 2rem;
+position: relative;
+overflow: hidden;
+border-top: 1px solid rgba(201,168,76,0.1);
+}
+
+.cta-section::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(201,168,76,0.06) 0%, transparent 70%);
+}
+
+.cta-section > * { position: relative; z-index: 1; }
+
+.cta-title {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(2.5rem, 5vw, 4.5rem);
+font-weight: 300;
+margin-bottom: 1.5rem;
+line-height: 1.15;
+}
+
+.cta-title em {
+font-style: italic;
+color: var(–gold-light);
+}
+
+.cta-verse {
+font-family: ‘Cormorant Garamond’, serif;
+font-style: italic;
+font-size: 0.95rem;
+color: var(–gold-dim);
+margin-bottom: 3rem;
+letter-spacing: 0.05em;
+}
+
+/* ── FOOTER ── */
+footer {
+background: #070809;
+padding: 3.5rem 3rem 2rem;
+border-top: 1px solid rgba(201,168,76,0.08);
+}
+
+.footer-inner {
+max-width: 1200px;
+margin: 0 auto;
+display: grid;
+grid-template-columns: 2fr 1fr 1fr 1fr;
+gap: 3rem;
+padding-bottom: 3rem;
+border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.footer-brand {
+font-family: ‘Cinzel’, serif;
+font-size: 1rem;
+letter-spacing: 0.2em;
+color: var(–gold);
+margin-bottom: 0.8rem;
+}
+
+.footer-tagline {
+font-family: ‘Cormorant Garamond’, serif;
+font-style: italic;
+font-size: 0.9rem;
+color: var(–text-muted);
+line-height: 1.7;
+margin-bottom: 1.2rem;
+}
+
+.footer-col h4 {
+font-family: ‘Cinzel’, serif;
+font-size: 0.65rem;
+letter-spacing: 0.3em;
+text-transform: uppercase;
+color: var(–gold-dim);
+margin-bottom: 1.2rem;
+}
+
+.footer-col ul { list-style: none; }
+
+.footer-col li {
+margin-bottom: 0.7rem;
+font-size: 0.8rem;
+color: var(–text-muted);
+cursor: pointer;
+transition: color 0.3s;
+}
+
+.footer-col li:hover { color: var(–gold-light); }
+
+.footer-bottom {
+max-width: 1200px;
+margin: 0 auto;
+padding-top: 1.5rem;
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: wrap;
+gap: 1rem;
+}
+
+.footer-copy {
+font-size: 0.72rem;
+color: var(–text-muted);
+}
+
+.footer-copy em {
+font-style: italic;
+color: var(–gold-dim);
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(20px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dotPulse {
+0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+40% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes scrollPulse {
+0% { transform: scaleY(0); transform-origin: top; }
+50% { transform: scaleY(1); transform-origin: top; }
+51% { transform: scaleY(1); transform-origin: bottom; }
+100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+.reveal {
+opacity: 0;
+transform: translateY(24px);
+transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+opacity: 1;
+transform: translateY(0);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+nav { padding: 1.2rem 1.5rem; }
+.nav-links { display: none; }
+.input-row { grid-template-columns: 1fr; }
+.deal-grid { grid-template-columns: 1fr; }
+.footer-inner { grid-template-columns: 1fr 1fr; }
+.hero-title { font-size: 3rem; }
+}
+
+@media (max-width: 480px) {
+.footer-inner { grid-template-columns: 1fr; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- NAV -->
+
+<nav>
+  <a href="#" class="nav-logo">
+    SOA SOLUTIONS
+    <span>Stewards of Abundance</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#strategies">Strategies</a></li>
+    <li><a href="#grader">Grade My Plan</a></li>
+    <li><a href="#deal">Score a Deal</a></li>
+  </ul>
+  <a href="#grader" class="nav-cta">Begin</a>
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-arch"></div>
+
+  <p class="verse-tag">Deuteronomy 8:18 — He gives you the ability to produce wealth</p>
+  <p class="hero-eyebrow">SOA Solutions</p>
+  <h1 class="hero-title">
+    Build Wealth With<br><em>Purpose & Wisdom</em>
+  </h1>
+  <p class="hero-subtitle">
+    A faith-grounded financial toolkit for everyday people ready to steward their resources, score smart deals, and architect lasting abundance.
+  </p>
+  <div class="hero-actions">
+    <a href="#grader" class="btn-primary">Grade Your Plan</a>
+    <a href="#strategies" class="btn-outline">Explore Strategies</a>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- SCRIPTURE BANNER -->
+
+<div class="scripture-banner">
+  <p class="scripture-text">"For I know the plans I have for you — plans to prosper you and not to harm you, plans to give you hope and a future."</p>
+  <p class="scripture-ref">Jeremiah 29:11</p>
+</div>
+
+<!-- TOOLS OVERVIEW -->
+
+<section class="tools-section" id="tools">
+  <div style="max-width:1200px;margin:0 auto;">
+    <p class="section-label reveal">The Platform</p>
+    <h2 class="section-title reveal">Four Pillars of <em>Financial Clarity</em></h2>
+    <p class="section-desc reveal">Every tool built inside SOA Solutions is designed to remove confusion, reveal opportunity, and align your financial decisions with Kingdom principles.</p>
+
+```
+<div class="tools-grid">
+  <a href="#grader" class="tool-card reveal">
+    <div class="tool-number">01</div>
+    <span class="tool-icon">📋</span>
+    <div class="tool-title">Business Plan Grader</div>
+    <p class="tool-desc">Submit your business plan and receive an AI-powered grade across fundability, market opportunity, financial viability, and strategic clarity.</p>
+    <span class="tool-tag">Grade My Pitch</span>
+  </a>
+  <a href="#deal" class="tool-card reveal">
+    <div class="tool-number">02</div>
+    <span class="tool-icon">🏗️</span>
+    <div class="tool-title">Deal Scorer</div>
+    <p class="tool-desc">Before you commit, let data speak. Enter deal parameters and get a scored breakdown of risk, return potential, and go/no-go clarity.</p>
+    <span class="tool-tag">Score This Deal</span>
+  </a>
+  <a href="#strategies" class="tool-card reveal">
+    <div class="tool-number">03</div>
+    <span class="tool-icon">📐</span>
+    <div class="tool-title">Wealth Architecture</div>
+    <p class="tool-desc">Phase-by-phase wealth-building strategies curated for everyday people — from your first $1,000 emergency fund to multi-asset legacy planning.</p>
+    <span class="tool-tag">See Strategies</span>
+  </a>
+  <a href="#advisory" class="tool-card reveal">
+    <div class="tool-number">04</div>
+    <span class="tool-icon">🕊️</span>
+    <div class="tool-title">Faith Advisory</div>
+    <p class="tool-desc">Wealth wisdom rooted in Scripture. Guidance that honors stewardship, generosity, and the calling to prosper with purpose — not just profit.</p>
+    <span class="tool-tag">Seek Counsel</span>
+  </a>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- PILLARS OF PRINCIPLE -->
+
+<section class="pillars-section" id="advisory">
+  <p class="section-label reveal">The Foundation</p>
+  <h2 class="section-title reveal">Rooted in <em>Kingdom Principles</em></h2>
+  <p class="section-desc reveal">Every strategy, every score, every recommendation flows from a belief that wealth is a tool for impact — and Yahweh is the source.</p>
+
+  <div class="pillars-grid">
+    <div class="pillar reveal">
+      <span class="pillar-glyph">🙏</span>
+      <div class="pillar-name">Seek First</div>
+      <p class="pillar-text">Every financial decision begins with prayer and discernment. Provision follows obedience.</p>
+    </div>
+    <div class="pillar reveal">
+      <span class="pillar-glyph">📖</span>
+      <div class="pillar-name">Stewardship</div>
+      <p class="pillar-text">We are managers, not owners. Managing well what we've been given opens the door to more.</p>
+    </div>
+    <div class="pillar reveal">
+      <span class="pillar-glyph">🌱</span>
+      <div class="pillar-name">Sow Generously</div>
+      <p class="pillar-text">Give first. The seed you plant in others' lives returns multiplied in your own harvest season.</p>
+    </div>
+    <div class="pillar reveal">
+      <span class="pillar-glyph">🏛️</span>
+      <div class="pillar-name">Build Legacy</div>
+      <p class="pillar-text">A good person leaves an inheritance for their children's children. Plan beyond your lifetime.</p>
+    </div>
+    <div class="pillar reveal">
+      <span class="pillar-glyph">⚖️</span>
+      <div class="pillar-name">Wise Counsel</div>
+      <p class="pillar-text">Plans fail for lack of counsel. Surround decisions with data, mentors, and prayer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BUSINESS PLAN GRADER (AI-Powered) -->
+
+<div id="grader" style="background:var(--deep); padding: 6rem 2rem;">
+  <p class="section-label reveal">AI Tool</p>
+  <h2 class="section-title reveal">Grade Your <em>Business Plan</em></h2>
+  <p class="section-desc reveal">Describe your business and our AI will score it across 5 critical dimensions — just like an investor would.</p>
+
+  <div class="grader-box reveal" style="max-width:860px;margin:0 auto;">
+    <div class="grader-header">
+      <div class="grader-badge">AI-Powered</div>
+      <div class="grader-title">Pitch & Plan Evaluator</div>
+    </div>
+
+```
+<div class="input-row">
+  <div class="input-group">
+    <label>Business Name</label>
+    <input type="text" id="biz-name" placeholder="e.g. Harvest & Co." />
+  </div>
+  <div class="input-group">
+    <label>Industry</label>
+    <select id="biz-industry">
+      <option value="">Select industry...</option>
+      <option>Real Estate</option>
+      <option>Retail / E-Commerce</option>
+      <option>Food & Beverage</option>
+      <option>Technology / SaaS</option>
+      <option>Health & Wellness</option>
+      <option>Financial Services</option>
+      <option>Education</option>
+      <option>Construction / Trades</option>
+      <option>Non-Profit / Ministry</option>
+      <option>Other</option>
+    </select>
+  </div>
+</div>
+
+<div class="input-group">
+  <label>Describe Your Business Plan</label>
+  <textarea id="biz-plan" rows="5" placeholder="What problem does it solve? Who is your customer? How do you make money? What makes you different?"></textarea>
+</div>
+
+<div class="input-row">
+  <div class="input-group">
+    <label>Stage</label>
+    <select id="biz-stage">
+      <option value="">Select stage...</option>
+      <option>Idea / Pre-Revenue</option>
+      <option>Early Traction (under $10k/mo)</option>
+      <option>Growth ($10k–$100k/mo)</option>
+      <option>Scaling ($100k+/mo)</option>
+    </select>
+  </div>
+  <div class="input-group">
+    <label>Funding Needed</label>
+    <select id="biz-funding">
+      <option value="">Select range...</option>
+      <option>Self-funded / Bootstrapped</option>
+      <option>Under $50,000</option>
+      <option>$50,000 – $250,000</option>
+      <option>$250,000 – $1M</option>
+      <option>$1M+</option>
+    </select>
+  </div>
+</div>
+
+<button class="grader-submit" id="grade-btn" onclick="gradePlan()">Analyze My Business Plan →</button>
+
+<div class="result-box" id="grade-result">
+  <div class="score-display">
+    <div class="score-circle">
+      <div class="score-num" id="score-num">--</div>
+      <div class="score-label">/ 100</div>
+    </div>
+    <div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;margin-bottom:0.4rem;" id="score-verdict">Analyzing...</div>
+      <div style="font-size:0.78rem;color:var(--text-muted);">Based on investor-grade criteria</div>
+    </div>
+  </div>
+  <div class="result-text" id="grade-text"></div>
+</div>
+```
+
+  </div>
+</div>
+
+<!-- DEAL SCORER -->
+
+<section class="deal-section" id="deal">
+  <p class="section-label reveal">AI Tool</p>
+  <h2 class="section-title reveal">Score Your <em>Deal</em></h2>
+  <p class="section-desc reveal">Before you commit capital, time, or partnership — know if this deal is worth it.</p>
+
+  <div class="deal-grid reveal">
+    <div class="deal-input-panel">
+      <div class="input-group">
+        <label>Deal Type</label>
+        <select id="deal-type">
+          <option value="">Select type...</option>
+          <option>Real Estate Purchase</option>
+          <option>Business Acquisition</option>
+          <option>Partnership / Joint Venture</option>
+          <option>Investment Opportunity</option>
+          <option>Contract / Service Agreement</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Describe the Deal</label>
+        <textarea id="deal-desc" rows="4" placeholder="What's the deal? What are the terms, upside, and risk you see?"></textarea>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label>Capital Required ($)</label>
+          <input type="number" id="deal-capital" placeholder="25000" />
+        </div>
+        <div class="input-group">
+          <label>Expected Return (%)</label>
+          <input type="number" id="deal-return" placeholder="18" />
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Timeline</label>
+        <select id="deal-timeline">
+          <option value="">Select...</option>
+          <option>Under 6 months</option>
+          <option>6–12 months</option>
+          <option>1–3 years</option>
+          <option>3–5 years</option>
+          <option>5+ years</option>
+        </select>
+      </div>
+      <button class="grader-submit" onclick="scoreDeal()">Score This Deal →</button>
+    </div>
+
+```
+<div class="deal-result-panel" id="deal-result-panel">
+  <p class="deal-placeholder" id="deal-placeholder">Your deal analysis will appear here after scoring.</p>
+  <div id="deal-meters" style="display:none;width:100%;">
+    <div style="text-align:center;margin-bottom:2rem;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:var(--gold-light);" id="deal-score-num">--</div>
+      <div style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);">Deal Score</div>
+    </div>
+    <div class="meter-wrap" style="margin:0 auto;">
+      <div class="meter-label"><span>Risk</span><span id="m-risk">--</span></div>
+      <div class="meter-bar"><div class="meter-fill" id="mf-risk" style="width:0%"></div></div>
+      <div class="meter-label"><span>Return Potential</span><span id="m-return">--</span></div>
+      <div class="meter-bar"><div class="meter-fill" id="mf-return" style="width:0%"></div></div>
+      <div class="meter-label"><span>Clarity</span><span id="m-clarity">--</span></div>
+      <div class="meter-bar"><div class="meter-fill" id="mf-clarity" style="width:0%"></div></div>
+      <div class="meter-label"><span>Exit Viability</span><span id="m-exit">--</span></div>
+      <div class="meter-bar"><div class="meter-fill" id="mf-exit" style="width:0%"></div></div>
+    </div>
+    <div id="deal-verdict" style="font-size:0.83rem;color:var(--text);line-height:1.9;margin-top:1.5rem;text-align:left;"></div>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- WEALTH STRATEGIES -->
+
+<section class="strategies-section" id="strategies">
+  <p class="section-label reveal">Wealth Architecture</p>
+  <h2 class="section-title reveal">Your <em>Roadmap</em> to Abundance</h2>
+  <p class="section-desc reveal">Phase-by-phase strategies built for real people starting from where they are — not where the finance industry assumes they should be.</p>
+
+  <div class="strategies-grid">
+    <div class="strategy-card reveal">
+      <div class="strategy-phase">Phase 1 — Foundation</div>
+      <div class="strategy-title">Stabilize & Protect</div>
+      <p class="strategy-desc">Build your $1,000 starter emergency fund. Eliminate high-interest debt using the debt snowball. Open your first HYSA. Establish a spending plan aligned with your values.</p>
+      <div class="strategy-tags">
+        <span class="stag">Emergency Fund</span>
+        <span class="stag">Debt Elimination</span>
+        <span class="stag">Budgeting</span>
+      </div>
+    </div>
+    <div class="strategy-card reveal">
+      <div class="strategy-phase">Phase 2 — Growth</div>
+      <div class="strategy-title">Invest & Multiply</div>
+      <p class="strategy-desc">Max your employer 401k match. Open a Roth IRA. Begin index fund investing. Explore real estate via REITs or your first rental property. Build 3–6 month reserves.</p>
+      <div class="strategy-tags">
+        <span class="stag">Roth IRA</span>
+        <span class="stag">Index Funds</span>
+        <span class="stag">Real Estate</span>
+      </div>
+    </div>
+    <div class="strategy-card reveal">
+      <div class="strategy-phase">Phase 3 — Enterprise</div>
+      <div class="strategy-title">Build Your Business</div>
+      <p class="strategy-desc">Launch or scale your income-producing business. Separate business & personal finances. Use business credit to leverage. Create systems that generate income without your time.</p>
+      <div class="strategy-tags">
+        <span class="stag">Business Credit</span>
+        <span class="stag">Cash Flow</span>
+        <span class="stag">Systems</span>
+      </div>
+    </div>
+    <div class="strategy-card reveal">
+      <div class="strategy-phase">Phase 4 — Legacy</div>
+      <div class="strategy-title">Architect Generational Wealth</div>
+      <p class="strategy-desc">Establish trusts and estate plans. Create life insurance strategies for wealth transfer. Build real estate portfolios. Fund your children's education. Teach stewardship to the next generation.</p>
+      <div class="strategy-tags">
+        <span class="stag">Trusts</span>
+        <span class="stag">Estate Planning</span>
+        <span class="stag">Education Fund</span>
+      </div>
+    </div>
+    <div class="strategy-card reveal">
+      <div class="strategy-phase">Kingdom Strategy</div>
+      <div class="strategy-title">Tithe, Give & Sow</div>
+      <p class="strategy-desc">Honor Yahweh first with your first fruits. Structure giving as part of your wealth plan — not as an afterthought. Sowing generosity activates supernatural provision.</p>
+      <div class="strategy-tags">
+        <span class="stag">Tithing</span>
+        <span class="stag">Giving Strategy</span>
+        <span class="stag">First Fruits</span>
+      </div>
+    </div>
+    <div class="strategy-card reveal">
+      <div class="strategy-phase">Credit & Capital</div>
+      <div class="strategy-title">Master the Credit System</div>
+      <p class="strategy-desc">Understand how credit scoring works. Build business credit separate from personal. Use OPM (Other People's Money) ethically to fund deals. Never borrow what you can't steward.</p>
+      <div class="strategy-tags">
+        <span class="stag">Credit Building</span>
+        <span class="stag">Business Credit</span>
+        <span class="stag">Leverage</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+
+<section class="testimonials-section">
+  <p class="section-label reveal">Community</p>
+  <h2 class="section-title reveal">Lives Being <em>Transformed</em></h2>
+  <p class="section-desc reveal">Everyday people finding clarity, confidence, and Kingdom alignment in their financial journey.</p>
+
+  <div class="testimonials-grid">
+    <div class="tcard reveal">
+      <div class="tcard-stars">★★★★★</div>
+      <p class="tcard-quote">"I always thought wealth-building wasn't for people like me. SOA gave me a roadmap I could actually follow — and reminded me that God's provision is real."</p>
+      <div class="tcard-author">
+        <div class="tcard-avatar">TW</div>
+        <div>
+          <div class="tcard-name">Tasha W.</div>
+          <div class="tcard-role">Single mother, Atlanta GA</div>
+        </div>
+      </div>
+    </div>
+    <div class="tcard reveal">
+      <div class="tcard-stars">★★★★★</div>
+      <p class="tcard-quote">"The business plan grader was humbling but honest. I didn't waste $30,000 on a pitch that wasn't ready. I fixed it first. Launched stronger."</p>
+      <div class="tcard-author">
+        <div class="tcard-avatar">MJ</div>
+        <div>
+          <div class="tcard-name">Marcus J.</div>
+          <div class="tcard-role">Entrepreneur, Houston TX</div>
+        </div>
+      </div>
+    </div>
+    <div class="tcard reveal">
+      <div class="tcard-stars">★★★★★</div>
+      <p class="tcard-quote">"I used the deal scorer before buying my first rental. The numbers told me what I needed to know. Closed with confidence. Cash flowing month one."</p>
+      <div class="tcard-author">
+        <div class="tcard-avatar">DH</div>
+        <div>
+          <div class="tcard-name">Darnell H.</div>
+          <div class="tcard-role">Real estate investor, Charlotte NC</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+
+<section class="cta-section">
+  <p class="section-label">Your Next Step</p>
+  <h2 class="cta-title">You Were Built<br>to <em>Thrive</em></h2>
+  <p class="cta-verse">"The blessing of the Lord brings wealth, without painful toil for it." — Proverbs 10:22</p>
+  <a href="#grader" class="btn-primary">Start Building Today</a>
+</section>
+
+<!-- FOOTER -->
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">SOA SOLUTIONS</div>
+      <p class="footer-tagline">Stewards of Abundance.<br>Faith-rooted. Data-driven.<br>Built for everyday people.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Tools</h4>
+      <ul>
+        <li>Grade Your Plan</li>
+        <li>Score a Deal</li>
+        <li>Wealth Strategies</li>
+        <li>Faith Advisory</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li>Getting Started</li>
+        <li>Strategy Library</li>
+        <li>Budget Templates</li>
+        <li>Scripture & Wealth</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li>About SOA</li>
+        <li>Our Mission</li>
+        <li>Contact Us</li>
+        <li>Privacy Policy</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 SOA Solutions. All rights reserved. <em>Soli Deo Gloria.</em></p>
+    <p class="footer-copy" style="font-style:italic;color:var(--gold-dim);">This platform provides financial education, not licensed financial advice.</p>
+  </div>
+</footer>
+
+<script>
+// ── SCROLL REVEAL ──
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(r => observer.observe(r));
+
+// ── BUSINESS PLAN GRADER ──
+async function gradePlan() {
+  const name = document.getElementById('biz-name').value.trim();
+  const plan = document.getElementById('biz-plan').value.trim();
+  const industry = document.getElementById('biz-industry').value;
+  const stage = document.getElementById('biz-stage').value;
+  const funding = document.getElementById('biz-funding').value;
+
+  if (!plan || plan.length < 40) {
+    alert('Please describe your business plan in more detail (at least a few sentences).');
+    return;
+  }
+
+  const btn = document.getElementById('grade-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span>';
+
+  const resultBox = document.getElementById('grade-result');
+  resultBox.classList.add('visible');
+  document.getElementById('score-num').textContent = '--';
+  document.getElementById('score-verdict').textContent = 'Analyzing your plan...';
+  document.getElementById('grade-text').innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span>';
+
+  const prompt = `You are a seasoned business analyst and faith-aligned investor reviewing a business plan submission.
+
+Business: ${name || 'Unnamed'}
+Industry: ${industry || 'Not specified'}
+Stage: ${stage || 'Not specified'}
+Funding Needed: ${funding || 'Not specified'}
+Plan Description: ${plan}
+
+Evaluate this business plan across these 5 dimensions (score each 0–20):
+1. Problem & Market Clarity (Is there a real problem? Is the market defined?)
+2. Revenue Model (Is it clear how money is made?)
+3. Competitive Advantage (What makes this different or defensible?)
+4. Financial Viability (Does the funding ask match the stage? Are margins plausible?)
+5. Execution Readiness (Does the founder seem prepared to actually build this?)
+
+Respond in this EXACT JSON format and nothing else:
+{
+  "total": <number 0-100>,
+  "verdict": "<3-5 word label like 'Strong Foundation — Refine Financials'>",
+  "scores": {
+    "problem": <0-20>,
+    "revenue": <0-20>,
+    "advantage": <0-20>,
+    "financial": <0-20>,
+    "execution": <0-20>
+  },
+  "summary": "<3-4 sentence honest, encouraging, faith-aligned assessment with specific strengths and 1-2 key improvements>",
+  "prayer_note": "<one short sentence of encouragement from a Kingdom perspective>"
+}`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const raw = data.content.map(i => i.text || '').join('');
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const result = JSON.parse(clean);
+
+    document.getElementById('score-num').textContent = result.total;
+    document.getElementById('score-verdict').textContent = result.verdict;
+
+    const color = result.total >= 70 ? 'var(--gold-light)' : result.total >= 50 ? '#E0B050' : '#C07050';
+    document.querySelector('.score-circle').style.borderColor = color;
+    document.getElementById('score-num').style.color = color;
+
+    document.getElementById('grade-text').innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:1.5rem;">
+        ${Object.entries(result.scores).map(([k,v]) => `
+          <div style="background:rgba(255,255,255,0.03);padding:0.7rem 1rem;border:1px solid rgba(201,168,76,0.1);">
+            <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.3rem;">${k.replace('advantage','Advantage').replace('financial','Financial').replace('revenue','Revenue').replace('problem','Problem & Market').replace('execution','Execution')}</div>
+            <div style="font-size:1.1rem;font-family:'Cormorant Garamond',serif;color:var(--gold-light);">${v}<span style="font-size:0.7rem;color:var(--text-muted)">/20</span></div>
+          </div>`).join('')}
+      </div>
+      <p style="margin-bottom:1rem;">${result.summary}</p>
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold-dim);font-size:0.9rem;border-top:1px solid rgba(201,168,76,0.1);padding-top:1rem;">🙏 ${result.prayer_note}</p>
+    `;
+  } catch (err) {
+    document.getElementById('grade-text').textContent = 'Analysis encountered an issue. Please try again.';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Analyze My Business Plan →';
+}
+
+// ── DEAL SCORER ──
+async function scoreDeal() {
+  const type = document.getElementById('deal-type').value;
+  const desc = document.getElementById('deal-desc').value.trim();
+  const capital = document.getElementById('deal-capital').value;
+  const ret = document.getElementById('deal-return').value;
+  const timeline = document.getElementById('deal-timeline').value;
+
+  if (!desc || desc.length < 30) {
+    alert('Please describe the deal in more detail.');
+    return;
+  }
+
+  document.getElementById('deal-placeholder').style.display = 'none';
+  document.getElementById('deal-meters').style.display = 'none';
+
+  const btn = event.target;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span>';
+
+  const placeholder = document.getElementById('deal-placeholder');
+  placeholder.style.display = 'block';
+  placeholder.textContent = 'Scoring your deal...';
+
+  const prompt = `You are a sharp deal analyst and Kingdom-minded financial advisor.
+
+Deal Type: ${type || 'Not specified'}
+Description: ${desc}
+Capital Required: $${capital || 'Not specified'}
+Expected Return: ${ret || 'Not specified'}%
+Timeline: ${timeline || 'Not specified'}
+
+Score this deal on these dimensions (0–100 each):
+- risk (higher = more risk)
+- return_potential (higher = better return)
+- clarity (higher = terms are clear and well understood)
+- exit_viability (higher = easier to exit if needed)
+
+Also give an overall deal score (0–100) and a 2–3 sentence verdict.
+
+Respond ONLY in this exact JSON format:
+{
+  "overall": <0-100>,
+  "risk": <0-100>,
+  "return_potential": <0-100>,
+  "clarity": <0-100>,
+  "exit_viability": <0-100>,
+  "verdict": "<2-3 sentences honest, data-driven, faith-aligned assessment>",
+  "go": <true or false>
+}`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 800,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const raw = data.content.map(i => i.text || '').join('');
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const result = JSON.parse(clean);
+
+    placeholder.style.display = 'none';
+    document.getElementById('deal-meters').style.display = 'block';
+
+    document.getElementById('deal-score-num').textContent = result.overall;
+
+    const scoreColor = result.go ? 'var(--gold-light)' : '#C07050';
+    document.getElementById('deal-score-num').style.color = scoreColor;
+
+    const set = (id, val) => {
+      document.getElementById(`m-${id}`).textContent = val;
+      setTimeout(() => {
+        document.getElementById(`mf-${id}`).style.width = val + '%';
+      }, 100);
+    };
+    set('risk', result.risk);
+    set('return', result.return_potential);
+    set('clarity', result.clarity);
+    set('exit', result.exit_viability);
+
+    document.getElementById('deal-verdict').innerHTML =
+      `<p style="margin-bottom:0.8rem;">${result.verdict}</p>
+       <p style="font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;color:${scoreColor};font-weight:500;">
+         ${result.go ? '✓ Recommended — Proceed with Prayer & Due Diligence' : '⚠ Caution — Pray on This Before Committing'}
+       </p>`;
+
+  } catch (err) {
+    placeholder.style.display = 'block';
+    placeholder.textContent = 'Scoring failed. Please try again.';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Score This Deal →';
+}
+</script>
+
+</body>
+</html>
