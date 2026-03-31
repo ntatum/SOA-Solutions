@@ -485,6 +485,22 @@
     color: var(--gold-light);
   }
 
+  /* ── FILE UPLOAD ZONE ── */
+  #upload-zone {
+    border: 1px dashed rgba(201,168,76,0.25);
+    background: rgba(201,168,76,0.02);
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 0;
+  }
+
+  #upload-zone:hover, #upload-zone.drag-over {
+    border-color: var(--gold-dim);
+    background: rgba(201,168,76,0.05);
+  }
+
   /* ── AI GRADER SECTION ── */
   .grader-section {
     background: var(--deep);
@@ -1216,6 +1232,28 @@
       <div class="grader-title">Pitch & Plan Evaluator</div>
     </div>
 
+    <!-- FILE UPLOAD ZONE -->
+    <div id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleDrop(event)">
+      <input type="file" id="file-input" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" style="display:none" onchange="handleFileSelect(event)" />
+      <div id="upload-idle">
+        <div style="font-size:2rem;margin-bottom:0.8rem;">📄</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--cream);margin-bottom:0.4rem;">Upload Your Business Plan</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">Drag & drop or click to browse<br><span style="color:var(--gold-dim);">PDF · Word Doc · PowerPoint · Google Slides (exported)</span></div>
+      </div>
+      <div id="upload-loaded" style="display:none;">
+        <div style="font-size:1.8rem;margin-bottom:0.6rem;">✅</div>
+        <div id="upload-filename" style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--gold-light);margin-bottom:0.3rem;"></div>
+        <div id="upload-status" style="font-size:0.72rem;color:var(--text-muted);">Reading file...</div>
+        <button onclick="clearUpload(event)" style="margin-top:0.8rem;background:none;border:1px solid rgba(201,168,76,0.2);color:var(--text-muted);padding:0.3rem 0.8rem;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;">Remove File</button>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:1rem;margin:1.2rem 0;">
+      <div style="flex:1;height:1px;background:rgba(201,168,76,0.1);"></div>
+      <div style="font-size:0.7rem;color:var(--text-muted);letter-spacing:0.15em;text-transform:uppercase;">or describe manually</div>
+      <div style="flex:1;height:1px;background:rgba(201,168,76,0.1);"></div>
+    </div>
+
     <div class="input-row">
       <div class="input-group">
         <label>Business Name</label>
@@ -1519,6 +1557,106 @@
 </footer>
 
 <script>
+// ── FILE UPLOAD HANDLING ──
+let uploadedFileText = '';
+
+function handleDrop(event) {
+  event.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag-over');
+  const file = event.dataTransfer.files[0];
+  if (file) processFile(file);
+}
+
+function handleFileSelect(event) {
+  const file = event.target.files[0];
+  if (file) processFile(file);
+}
+
+function clearUpload(event) {
+  event.stopPropagation();
+  uploadedFileText = '';
+  document.getElementById('upload-idle').style.display = 'block';
+  document.getElementById('upload-loaded').style.display = 'none';
+  document.getElementById('file-input').value = '';
+}
+
+async function processFile(file) {
+  const allowed = ['application/pdf','application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'text/plain'];
+
+  if (!allowed.includes(file.type) && !file.name.match(/\.(pdf|doc|docx|ppt|pptx|txt)$/i)) {
+    alert('Please upload a PDF, Word document, PowerPoint, or text file.');
+    return;
+  }
+
+  document.getElementById('upload-idle').style.display = 'none';
+  document.getElementById('upload-loaded').style.display = 'block';
+  document.getElementById('upload-filename').textContent = file.name;
+  document.getElementById('upload-status').textContent = 'Reading file...';
+
+  try {
+    if (file.type === 'text/plain' || file.name.endsWith('.txt')) {
+      // Plain text — read directly
+      uploadedFileText = await file.text();
+      document.getElementById('upload-status').textContent = `✓ Ready — ${Math.round(uploadedFileText.length / 5)} words extracted`;
+
+    } else if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+      // PDF — send to Claude as base64 document
+      const base64 = await fileToBase64(file);
+      uploadedFileText = `__PDF_BASE64__:${base64}:__MIME__:application/pdf`;
+      document.getElementById('upload-status').textContent = '✓ PDF ready for analysis';
+
+    } else if (file.name.match(/\.(docx)$/i)) {
+      // DOCX — use mammoth via CDN
+      if (typeof mammoth === 'undefined') {
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');
+      }
+      const arrayBuffer = await file.arrayBuffer();
+      const result = await mammoth.extractRawText({ arrayBuffer });
+      uploadedFileText = result.value;
+      document.getElementById('upload-status').textContent = `✓ Ready — ${Math.round(uploadedFileText.length / 5)} words extracted`;
+
+    } else if (file.name.match(/\.(pptx)$/i)) {
+      // PPTX — send as base64 with note
+      const base64 = await fileToBase64(file);
+      uploadedFileText = `__PDF_BASE64__:${base64}:__MIME__:application/vnd.openxmlformats-officedocument.presentationml.presentation`;
+      document.getElementById('upload-status').textContent = '✓ Presentation ready for analysis';
+
+    } else if (file.name.match(/\.(doc|ppt)$/i)) {
+      // Older formats — read as text best-effort
+      uploadedFileText = await file.text();
+      document.getElementById('upload-status').textContent = '✓ File read — some formatting may vary';
+
+    } else {
+      uploadedFileText = await file.text();
+      document.getElementById('upload-status').textContent = '✓ File ready';
+    }
+  } catch (err) {
+    document.getElementById('upload-status').textContent = '⚠ Could not read file — please describe your plan manually below';
+    uploadedFileText = '';
+  }
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = resolve; s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
 // ── SCROLL REVEAL ──
 const reveals = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver((entries) => {
@@ -1538,7 +1676,12 @@ async function gradePlan() {
   const stage = document.getElementById('biz-stage').value;
   const funding = document.getElementById('biz-funding').value;
 
-  if (!plan || plan.length < 40) {
+  if (!plan && !uploadedFileText) {
+    alert('Please upload a file or describe your business plan below.');
+    return;
+  }
+
+  if (!uploadedFileText && plan.length < 40) {
     alert('Please describe your business plan in more detail (at least a few sentences).');
     return;
   }
@@ -1553,13 +1696,45 @@ async function gradePlan() {
   document.getElementById('score-verdict').textContent = 'Analyzing your plan...';
   document.getElementById('grade-text').innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span>';
 
-  const prompt = `You are a seasoned business analyst and faith-aligned investor reviewing a business plan submission.
+  // Use uploaded file text if available, otherwise use manual input
+  const planContent = uploadedFileText || plan;
 
-Business: ${name || 'Unnamed'}
-Industry: ${industry || 'Not specified'}
-Stage: ${stage || 'Not specified'}
-Funding Needed: ${funding || 'Not specified'}
-Plan Description: ${plan}
+  if (!planContent || (planContent.length < 40 && !uploadedFileText)) {
+    alert('Please upload a file or describe your business plan in more detail.');
+    btn.disabled = false;
+    btn.textContent = 'Analyze My Business Plan →';
+    resultBox.classList.remove('visible');
+    return;
+  }
+
+  // Build messages — handle PDF/PPTX base64 differently
+  let messages;
+  if (planContent.startsWith('__PDF_BASE64__:')) {
+    const parts = planContent.split(':__MIME__:');
+    const b64 = parts[0].replace('__PDF_BASE64__:', '');
+    const mime = parts[1];
+    const isPdf = mime === 'application/pdf';
+    messages = [{
+      role: 'user',
+      content: [
+        isPdf ? {
+          type: 'document',
+          source: { type: 'base64', media_type: 'application/pdf', data: b64 }
+        } : {
+          type: 'text',
+          text: `[Presentation file uploaded — analyze its business content]`
+        },
+        {
+          type: 'text',
+          text: `Business: ${name || 'Unnamed'}\nIndustry: ${industry || 'Not specified'}\nStage: ${stage || 'Not specified'}\nFunding Needed: ${funding || 'Not specified'}\n\nPlease evaluate the uploaded business plan document using the scoring criteria below.`
+        }
+      ]
+    }];
+  } else {
+    messages = [{ role: 'user', content: `Business: ${name || 'Unnamed'}\nIndustry: ${industry || 'Not specified'}\nStage: ${stage || 'Not specified'}\nFunding Needed: ${funding || 'Not specified'}\nPlan Description: ${planContent.slice(0, 8000)}` }];
+  }
+
+  const prompt = `You are a seasoned business analyst and faith-aligned investor reviewing a business plan submission.
 
 Evaluate this business plan across these 5 dimensions (score each 0–20):
 1. Problem & Market Clarity (Is there a real problem? Is the market defined?)
@@ -1584,13 +1759,20 @@ Respond in this EXACT JSON format and nothing else:
 }`;
 
   try {
+    // Inject the prompt into messages
+    if (messages[0].content && Array.isArray(messages[0].content)) {
+      messages[0].content.push({ type: 'text', text: prompt });
+    } else {
+      messages[0].content = messages[0].content + '\n\n' + prompt;
+    }
+
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
         max_tokens: 1000,
-        messages: [{ role: "user", content: prompt }]
+        messages: messages
       })
     });
 
